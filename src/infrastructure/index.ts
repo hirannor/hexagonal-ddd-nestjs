@@ -3,3 +3,4 @@ export * from './event/domain.event';
 export * from './message/message';
 export * from './message/message-id';
 export * from './message/message-publisher';
+export * from './infrastructure.tokens';

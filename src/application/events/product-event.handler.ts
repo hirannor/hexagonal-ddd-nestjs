@@ -6,7 +6,7 @@ import { ProductCreatedEvent } from '@domain/product';
 export class ProductEventHandler {
   private readonly logger = new Logger(ProductEventHandler.name);
 
-  @OnEvent('ProductCreatedEvent')
+  @OnEvent('product_created')
   handle(event: ProductCreatedEvent) {
     this.logger.log(
       `Received event: ${event.constructor.name} with id: ${event.id().asText()}, occurred on: ${event.occurredOn().toUTCString()}`,

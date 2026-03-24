@@ -14,12 +14,13 @@ The goal is to keep the **domain and application logic independent** from techni
 - **TypeScript**
 - **TypeORM** (for persistence adapter)
 - **PostgreSQL** (when TypeORM adapter is selected)
-- **EventEmitter2** (domain/application event handling)
+- **RabbitMQ** (messaging adapter for domain-event transport)
+- **EventEmitter2** (internal domain/application event handling)
 
 ## Architecture Overview
 
 - `src/domain`  
-  Core domain model, domain events, and repository contracts (ports).
+  Core domain model, domain events, value objects, and repository contracts (ports).
 
 - `src/application`  
   Use cases and application services orchestrating domain behavior.
@@ -28,23 +29,16 @@ The goal is to keep the **domain and application logic independent** from techni
   External adapters:
     - web/rest controllers
     - persistence adapters (`typeorm`, `inmemory`)
+    - messaging adapter (`rabbitmq`) for transport-level publish/consume
 
 - `src/infrastructure`  
   Shared technical abstractions and framework-facing contracts.
 
-## Configuration
+## Domain Event Flow (Transport -> Internal Bus)
 
-Environment is loaded from:
+Current flow for domain events:
 
-- `.env.development` (when `NODE_ENV=development`)
-
-Repository adapter can be selected via env variable:
-
-- `REPOSITORY_ADAPTER=typeorm`
-- `REPOSITORY_ADAPTER=inmemory`
-
-## Run
-
-```bash
-npm install
-npm run start:dev
+1. Application/domain creates a concrete domain event (e.g. product created).
+2. Publisher sends it through RabbitMQ under pattern/type `domain_event`.
+3. RabbitMQ consumer receives payload in transport shape (plain JSON).
+4. Consumer maps payload to the correct concrete `DomainEvent` using category-based mapper

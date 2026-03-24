@@ -4,9 +4,10 @@ import { Product } from '@domain/product/product';
 import type { ProductRepository } from '@domain/product';
 import { ProductCreating } from '@application/usecases/product-creating';
 import { CreateProduct } from '@domain/product/create-product';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ProductNotFoundError } from '@application/errors/product-not-found.error';
 import { PRODUCT_REPOSITORY } from '@application/tokens/repository.tokens';
+import { MESSAGE_PUBLISHER } from '@infrastructure/infrastructure.tokens';
+import { MessagePublisher } from '@infrastructure/message/message-publisher';
 
 @Injectable()
 export class ProductService implements ProductDisplaying, ProductCreating {
@@ -14,7 +15,7 @@ export class ProductService implements ProductDisplaying, ProductCreating {
 
   constructor(
     @Inject(PRODUCT_REPOSITORY) private readonly products: ProductRepository,
-    private readonly events: EventEmitter2,
+    @Inject(MESSAGE_PUBLISHER) private readonly messages: MessagePublisher,
   ) {}
 
   async displayById(id: string): Promise<Product> {
@@ -35,11 +36,9 @@ export class ProductService implements ProductDisplaying, ProductCreating {
     this.logger.log('Start Saving product');
 
     const product: Product = Product.create(command);
-    await this.products.save(product);
 
-    product
-      .events()
-      .forEach((event) => this.events.emit(event.constructor.name, event));
+    await this.products.save(product);
+    await this.messages.publish(product.events());
 
     this.logger.log(
       `Product with id: ${product.id.asText()} saved successfully!`,
