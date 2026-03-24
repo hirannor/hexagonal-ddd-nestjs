@@ -13,11 +13,11 @@ export function mapToDomainEvent(
   if (
     !payload ||
     typeof payload !== 'object' ||
-    typeof payload._category !== 'string'
+    typeof payload._type !== 'string'
   ) {
     return null;
   }
 
-  const factory = factories[payload._category];
+  const factory = factories[payload._type];
   return factory ? factory(payload) : null;
 }

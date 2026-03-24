@@ -6,25 +6,21 @@ export class ProductCreatedEvent implements DomainEvent {
   private readonly _id: MessageId;
   private readonly _productId: ProductId;
   private readonly _occurredOn: Date;
-  private readonly _category: string;
+  private readonly _type: string;
 
   constructor(id: MessageId, productId: ProductId, occurredOn: Date) {
     this._id = id;
     this._productId = productId;
     this._occurredOn = occurredOn;
-    this._category = 'product_created';
-  }
-
-  type(): string {
-    return 'domain_event';
-  }
-
-  category(): string {
-    return this._category;
+    this._type = 'product_created';
   }
 
   public static record(productId: ProductId): ProductCreatedEvent {
     return new ProductCreatedEvent(MessageId.generate(), productId, new Date());
+  }
+
+  type(): string {
+    return this._type;
   }
 
   id(): MessageId {

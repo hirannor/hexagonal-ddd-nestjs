@@ -12,7 +12,7 @@ import {
 } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { RabbitMqConfig } from './rabbitmq.config';
-import { RABBITMQ_CONFIG } from '../tokens';
+import { RABBITMQ_CONFIG } from '../messaging.tokens';
 import { Message } from '@infrastructure/message/message';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class RabbitMqConnection implements OnModuleInit, OnModuleDestroy {
   async send(pattern: string, payload: Message): Promise<void> {
     this.logger.debug(`Publishing pattern="${pattern}"`);
 
-    await lastValueFrom(this.client.send(pattern, payload));
+    await lastValueFrom(this.client.emit(pattern, payload));
   }
 
   async onModuleDestroy(): Promise<void> {

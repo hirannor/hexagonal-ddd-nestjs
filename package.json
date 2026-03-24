@@ -27,6 +27,8 @@
     "@nestjs/microservices": "^11.1.17",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/typeorm": "^11.0.0",
+    "amqp-connection-manager": "^5.0.0",
+    "amqplib": "^0.10.9",
     "dotenv": "^17.3.1",
     "pg": "^8.20.0",
     "reflect-metadata": "^0.2.2",

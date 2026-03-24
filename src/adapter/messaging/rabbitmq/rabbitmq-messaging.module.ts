@@ -1,10 +1,11 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RABBITMQ_CONFIG } from './tokens';
+import { RABBITMQ_CONFIG } from './messaging.tokens';
 import { RabbitMqConnection } from './config/rabbitmq.connection';
 import { RabbitMqMessagePublisher } from './rabbitmq-message.publisher';
 import { RabbitMqMessageConsumer } from './rabbitmq-message.consumer';
 import { MESSAGE_PUBLISHER } from '@infrastructure/infrastructure.tokens';
+import { createRabbitMqConfig } from './config/rabbitmq.config';
 
 @Global()
 @Module({
@@ -14,10 +15,7 @@ import { MESSAGE_PUBLISHER } from '@infrastructure/infrastructure.tokens';
     {
       provide: RABBITMQ_CONFIG,
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        url: configService.get<string>('RABBITMQ_URL'),
-        queue: configService.get<string>('RABBITMQ_QUEUE'),
-      }),
+      useFactory: createRabbitMqConfig,
     },
     RabbitMqConnection,
     {

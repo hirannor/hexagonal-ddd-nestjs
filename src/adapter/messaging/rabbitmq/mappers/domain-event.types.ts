@@ -5,7 +5,7 @@ export interface SerializedValueObject {
 }
 
 export interface DomainEventPayload {
-  _category: string;
+  _type: string;
   _id?: SerializedValueObject | string;
   _occurredOn?: string | Date;
   [key: string]: unknown;
