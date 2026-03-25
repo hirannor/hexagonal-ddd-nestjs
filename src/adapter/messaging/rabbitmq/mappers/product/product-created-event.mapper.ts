@@ -6,20 +6,22 @@ import { DomainEvent } from '@infrastructure/event/domain.event';
 import { DomainEventPayload } from '../domain-event.types';
 import { parseDate, readUniqueComponent } from '../domain-event-parsers';
 
-export function mapProductCreatedEvent(
+export function mapPayloadToEvent(
   payload: DomainEventPayload,
 ): DomainEvent | null {
-  const eventId = readUniqueComponent(payload._id);
-  const occurredOn = parseDate(payload._occurredOn);
-  const productId = readUniqueComponent(payload._productId);
+  const eventId: string | null = readUniqueComponent(payload._id);
+  const occurredOn: Date | null = parseDate(payload._occurredOn);
+  const productIdAsText: string | null = readUniqueComponent(
+    payload._productId,
+  );
 
-  if (!eventId || !occurredOn || !productId) {
+  if (!eventId || !occurredOn || !productIdAsText) {
     return null;
   }
 
   return new ProductCreatedEvent(
     new MessageId(eventId),
-    new ProductId(productId),
+    new ProductId(productIdAsText),
     occurredOn,
   );
 }

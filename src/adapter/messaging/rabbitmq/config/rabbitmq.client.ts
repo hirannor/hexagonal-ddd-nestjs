@@ -16,8 +16,8 @@ import { RABBITMQ_CONFIG } from '../messaging.tokens';
 import { Message } from '@infrastructure/message/message';
 
 @Injectable()
-export class RabbitMqConnection implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(RabbitMqConnection.name);
+export class RabbitmqClient implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(RabbitmqClient.name);
 
   private client!: ClientProxy;
 
@@ -48,7 +48,7 @@ export class RabbitMqConnection implements OnModuleInit, OnModuleDestroy {
   async onModuleDestroy(): Promise<void> {
     if (this.client) {
       await this.client.close();
-      this.logger.log('RabbitMQ client closed');
+      this.logger.debug('RabbitMQ client closed');
     }
   }
 }

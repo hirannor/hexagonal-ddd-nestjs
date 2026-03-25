@@ -1,11 +1,9 @@
 import { Global, Module } from '@nestjs/common';
-import {
-  ProductEntity,
-  ProductTypeOrmRepository,
-} from '@adapter/repository/typeorm/product';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PRODUCT_REPOSITORY } from '@application/tokens/repository.tokens';
+import { ProductEntity } from '@adapter/repository/typeorm/product/product.entity';
+import { ProductTypeOrmRepository } from '@adapter/repository/typeorm/product/product-typeorm.repository';
 
 @Global()
 @Module({

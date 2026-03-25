@@ -1,10 +1,10 @@
 import { DomainEvent } from '@infrastructure/event/domain.event';
 
 import { DomainEventFactory, DomainEventPayload } from './domain-event.types';
-import { mapProductCreatedEvent } from './product/product-created-event.mapper';
+import { mapPayloadToEvent } from './product/product-created-event.mapper';
 
 const factories: Record<string, DomainEventFactory> = {
-  product_created: mapProductCreatedEvent,
+  product_created: mapPayloadToEvent,
 };
 
 export function mapToDomainEvent(
@@ -18,6 +18,6 @@ export function mapToDomainEvent(
     return null;
   }
 
-  const factory = factories[payload._type];
+  const factory: DomainEventFactory = factories[payload._type];
   return factory ? factory(payload) : null;
 }
