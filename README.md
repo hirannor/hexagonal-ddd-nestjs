@@ -20,6 +20,7 @@ The goal is to keep the **domain and application logic independent** from techni
 - **TypeORM** (for persistence adapter)
 - **PostgreSQL** (when TypeORM adapter is selected)
 - **RabbitMQ** (messaging adapter for domain-event transport)
+- **Noop messaging adapter** (for tests and runs without external messaging)
 - **EventEmitter2** (internal domain/application event handling)
 
 ## Architecture Overview
@@ -72,7 +73,14 @@ Use `.env.example` as the template and rename/copy it:
 Copy-Item .env.example .env.development
 ```
 
-Then update values in `.env.development` (for example `RABBITMQ_URL`, `RABBITMQ_QUEUE`, and database settings) to match your local setup.
+Then update values in `.env.development` to match your local setup.
+
+Messaging and persistence adapters are selected explicitly via environment variables:
+
+- `MESSAGE_ADAPTER=noop` uses the noop messaging adapter (default/fallback-friendly for tests)
+- `MESSAGE_ADAPTER=rabbitmq` enables the RabbitMQ messaging adapter and requires `RABBITMQ_URL` and `RABBITMQ_QUEUE`
+- `REPOSITORY_ADAPTER=inmemory` uses the in-memory repository adapter
+- `REPOSITORY_ADAPTER=typeorm` enables PostgreSQL/TypeORM and requires the database variables
 
 ### 4) Start infrastructure (Docker Compose)
 
@@ -94,7 +102,9 @@ docker compose down
 npm run start:dev
 ```
 
+
 ### Notes
 
 - To use another environment, set `NODE_ENV` and create the matching `.env.<NODE_ENV>` file.
-- If startup fails due to connection errors, verify Docker containers are running and values in `.env.development` match exposed ports/credentials from `docker-compose.yaml`.
+- E2E tests force `MESSAGE_ADAPTER=noop` and `REPOSITORY_ADAPTER=inmemory` so they run without RabbitMQ or PostgreSQL.
+- If startup fails due to connection errors, verify Docker containers are running and your selected adapters and environment values match the required infrastructure.

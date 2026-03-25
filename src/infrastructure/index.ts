@@ -4,3 +4,4 @@ export * from './message/message';
 export * from './message/message-id';
 export * from './message/message-publisher';
 export * from './infrastructure.tokens';
+export * from './uuid';

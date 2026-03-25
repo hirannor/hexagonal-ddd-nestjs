@@ -1,4 +1,4 @@
-import { RepositoryAdapter } from '@infrastructure/repository/repository.adapter';
+import { RepositoryAdapter } from '@infrastructure/adapter/repository.adapter';
 import { TypeOrmRepositoryModule } from '@adapter/repository/typeorm/type-orm-repository.module';
 import { InMemoryRepositoryModule } from '@adapter/repository/inmemory/inmemory-repository.module';
 
