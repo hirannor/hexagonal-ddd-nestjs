@@ -20,7 +20,6 @@ The goal is to keep the **domain and application logic independent** from techni
 - **TypeORM** (for persistence adapter)
 - **PostgreSQL** (when TypeORM adapter is selected)
 - **RabbitMQ** (messaging adapter for domain-event transport)
-- **Noop messaging adapter** (for tests and runs without external messaging)
 - **EventEmitter2** (internal domain/application event handling)
 
 ## Architecture Overview
